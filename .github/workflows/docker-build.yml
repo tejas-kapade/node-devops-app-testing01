@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker pull username/node-devops-app-p1:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
             docker stop node-devops-app-p1 || true
             docker rm node-devops-app-p1 || true
-            docker run -d -p 80:3000 --name node-devops-app-p1 username/node-devops-app-p1:latest
+            docker run -d -p 80:3000 --name node-devops-app-p1 ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
