@@ -30,3 +30,15 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+            docker stop node-devops-app-p1 || true
+            docker rm node-devops-app-p1 || true
+            docker run -d -p 3000:3000 --name node-devops-app-p1 ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
