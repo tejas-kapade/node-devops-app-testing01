@@ -38,7 +38,23 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+          
+            # Install Docker if not installed
+            if ! command -v docker &> /dev/null
+            then
+                echo "Docker not found, installing..."
+                sudo apt update
+                sudo apt install -y docker.io
+                sudo systemctl start docker
+                sudo systemctl enable docker
+            fi
+            
+            #Pull Image
             docker pull ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+            
+            #Stop old container and remove
             docker stop node-devops-app-p1 || true
             docker rm node-devops-app-p1 || true
+            
+            #Run new container on port 80 of server
             docker run -d -p 80:3000 --name node-devops-app-p1 ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
