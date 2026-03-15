@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const client = require("prom-client");
 
 const app = express();
 
@@ -10,6 +11,9 @@ const MONGO_URL = process.env.MONGO_URL;
 mongoose.connect("mongodb://mongo:27017/devopsdb")
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
+
+// collect default metrics
+client.collectDefaultMetrics();
 
 app.get("/", (req, res) => {
   res.send(`
@@ -71,6 +75,12 @@ app.get("/health", (req, res) => {
     status: "running",
     uptime: process.uptime()
   });
+});
+
+// metrics endpoint for Prometheus
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
 });
 
 app.listen(PORT, () => {
