@@ -1,1 +1,1 @@
-.env
+removed .env because docker compose was failing due to not finding .env file
