@@ -49,12 +49,39 @@ jobs:
                 sudo systemctl enable docker
             fi
             
+            #Below commands was for running container directly from pulled image so unable to run all containers like graphana and prometheus separately on different ports hence commented
             #Pull Image
-            docker pull ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+            #docker pull ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
             
             #Stop old container and remove
-            docker stop node-devops-app-p1 || true
-            docker rm node-devops-app-p1 || true
+            #docker stop node-devops-app-p1 || true
+            #docker rm node-devops-app-p1 || true
             
             #Run new container on port 80 of server
-            docker run -d -p 80:3000 --name node-devops-app-p1 ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+            #docker run -d -p 80:3000 --name node-devops-app-p1 ${{ secrets.DOCKER_USERNAME }}/node-devops-app-p1:latest
+
+            #Below code will clone our repository and run docker compose file to run all containers with specific ports
+            
+            # Install Docker Compose if missing
+            if ! docker compose version &> /dev/null
+            then
+               echo "Installing Docker Compose..."
+               sudo mkdir -p /usr/local/lib/docker/cli-plugins
+               sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
+               -o /usr/local/lib/docker/cli-plugins/docker-compose
+               sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+            fi
+            
+            #Now creting our application directory where it will be installed
+            mkdir -p /home/me_tejaskapade/app
+            cd /home/me_tejaskapade/app
+
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/tejas-kapade/node-devops-app-testing01 .
+            else
+              git pull
+            fi
+
+            docker compose down
+            docker compose up -d
+  
