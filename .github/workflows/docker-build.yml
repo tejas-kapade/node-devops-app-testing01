@@ -81,6 +81,8 @@ jobs:
             else
               git pull
             fi
+            
+            export DOCKER_API_VERSION=1.41
 
             docker compose down
             docker compose up -d
