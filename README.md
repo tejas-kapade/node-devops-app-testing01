@@ -1,8 +1,8 @@
-Server URL: 34.172.245.86
-Access URLs:
-Node.js: http://34.172.245.86/
-Grafana: http://34.172.245.86:3001/
-Prometheus: http://34.172.245.86:9090/
+Server Public IP: 34.172.245.86 <br>
+Access URLs:<br>
+Node.js: http://34.172.245.86/<br>
+Grafana: http://34.172.245.86:3001/<br>
+Prometheus: http://34.172.245.86:9090/<br>
 
 Hosted on Google Cloud Platform.
 
