@@ -77,11 +77,12 @@ jobs:
             cd /home/me_tejaskapade/app
 
             if [ ! -d ".git" ]; then
-              git clone https://github.com/tejas-kapade/node-devops-app-testing01 .
+              git clone https://github.com/tejas-kapade/node-devops-app-testing01
             else
               git pull
             fi
             
+            cd node-devops-app-testing01
             export DOCKER_API_VERSION=1.41
 
             docker compose down
